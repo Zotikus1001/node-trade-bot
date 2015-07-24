@@ -8,8 +8,8 @@ var getSteamAPIKey   = require('steam-web-api-key');
 var SteamTradeOffers = require('steam-tradeoffers');
 
 var logOnOptions = {
-    account_name: '', // your login name
-    password: '' // your login password
+    account_name: 'stormydacat', // your login name
+    password: 'redsoxOrt1z' // your login password
 };
 
 var authCode = ''; // code received by email
@@ -33,10 +33,11 @@ var steamWebLogOn = new SteamWebLogOn(steamClient, steamUser);
 var offers        = new SteamTradeOffers();
 
 var connection = mysql.createConnection({
-    host     : '', // mysql host
-    user     : '', // mysql username
-    password : '', // mysql password
-    database : '' // mysql database
+    host     : 'db4free.net', // mysql host
+    user     : 'andrewda', // mysql username
+    password : 'redsoxOrt1z', // mysql password
+    database : 'nodebot', // mysql database
+    connectTimeout: 0
 });
 
 connection.connect();
@@ -83,7 +84,7 @@ steamUser.on('tradeOffers', function(number) {
             get_received_offers: 1,
             active_only: 1,
             time_historical_cutoff: Math.round(Date.now() / 1000)
-        }, function(error, body) {
+        }, function(err, body) {
             if (body.response.trade_offers_received) {
                 body.response.trade_offers_received.forEach(function(offer) {
                     if (offer.trade_offer_state == 2) {
@@ -107,7 +108,9 @@ steamUser.on('tradeOffers', function(number) {
 });
 
 function postToSQL(statement) {
-    connection.query(statement);
+    connection.query(statement, function(err) { 
+        if (err) throw err; 
+    });
 }
 
 function getSHA1(bytes) {
