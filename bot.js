@@ -107,10 +107,7 @@ steamUser.on('tradeOffers', function(number) {
 });
 
 function postToSQL(statement) {
-    connection.query(statement, function(err, rows, fields) {
-        console.log(rows);
-        if (err) throw err;
-    });
+    connection.query(statement);
 }
 
 function getSHA1(bytes) {
